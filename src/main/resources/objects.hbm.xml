@@ -1,0 +1,1724 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+
+    <class name="com.elector.Objects.Entities.ConfigObject" table="config">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property name="configKey" type="string" column="config_key"/>
+        <property name="configValue" type="string" column="config_value"/>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+
+    </class>
+
+
+    <class name="com.elector.Objects.Entities.TranslationObject" table="translations" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property name="translationKey" column="translation_key" type="string"/>
+        <property name="translationValue" column="translation_value" type="string"/>
+        <property name="en" column="en" type="string"/>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+    </class>
+
+
+    <class name="com.elector.Objects.Entities.VoterObject" table="voters" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property name="voterId" type="string" column="voter_id" index="ind_get_voter_by_id"/>
+        <property name="firstName" type="string" column="first_name" not-null="true"/>
+        <property name="lastName" type="string" column="last_name" not-null="true"/>
+        <property name="address" type="string">
+            <column name="address"  default="" not-null="true"/>
+        </property>
+        <property name="phone" type="string" column="phone"/>
+        <property name="birthDate" column="birth_date" type="java.util.Date"/>
+        <property name="email" type="string" column="email"/>
+        <many-to-one name="adminUserObject" column="admin_user_oid"
+                     class="com.elector.Objects.Entities.AdminUserObject"
+                     index="ind_get_voter_by_id"/>
+        <many-to-one name="campaignVoterObject" column="campaign_voter_oid"
+                     class="com.elector.Objects.Entities.CampaignVoterObject"/>
+        <property  name="voted" type="java.lang.Boolean">
+            <column name="voted"  default="false"/>
+        </property>
+        <property  name="allowRecall" type="java.lang.Boolean">
+            <column name="allow_recall"  default="true"/>
+        </property>
+
+        <property  name="male" type="java.lang.Boolean">
+            <column name="male"/>
+        </property>
+        <property  name="supportStatus" type="int" index="ind_support_status">
+            <column name="support_status"  default="0"/>
+        </property>
+        <property  name="supportSign" type="int">
+            <column name="support_sign"  default="0"/>
+        </property>
+        <property  name="deleted" type="boolean" index="ind_get_voter_by_id">
+            <column name="deleted"  default="false"/>
+        </property>
+        <property  name="supportersListStatus" type="int">
+            <column name="supporters_list_status"  default="0"/>
+        </property>
+        <property name="homePhone" type="string" column="home_phone"/>
+        <property name="extraPhone" type="string" column="extra_phone"/>
+        <many-to-one name="activistObject" column="activist_oid"
+                     class="com.elector.Objects.Entities.ActivistObject"/>
+        <property name="comment" type="text" column="comment"/>
+        <property name="language" type="int" column="language"/>
+        <property  name="needsRide" type="int">
+            <column name="needs_ride"  default="0"/>
+        </property>
+        <property  name="votedRound1" type="java.lang.Boolean">
+            <column name="voted_round_1"  default="false"/>
+        </property>
+        <many-to-one name="israelLaborPartyVoterObject" column="israel_labor_party_voter_oid"
+                     class="com.elector.Objects.Entities.LaborParty.IsraelLaborPartyVoterObject"/>
+        <many-to-one name="likudPartyVoterObject" column="likud_party_voter_oid"
+                     class="com.elector.Objects.Entities.LikudParty.LikudPartyVoterObject"/>
+        <many-to-one name="israelLaborVoterEditableDataObject" column="israel_labor_voter_editable_data_oid"
+                     class="com.elector.Objects.Entities.LaborParty.IsraelLaborVoterEditableDataObject" cascade="all"/>
+        <many-to-one name="likudVoterEditableDataObject" column="likud_voter_editable_data_oid"
+                     class="com.elector.Objects.Entities.LikudParty.LikudVoterEditableDataObject" cascade="all"/>
+        <property  name="voteIntention" type="int">
+            <column name="vote_intention"  default="0"/>
+        </property>
+    </class>
+
+    <class name="com.elector.Objects.Entities.ActivistVoterMapObject" table="activists_voters_map" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="voter" column="voter_oid"
+                     class="com.elector.Objects.Entities.VoterObject" not-null="true"/>
+        <many-to-one name="activist" column="activist_oid"
+                     class="com.elector.Objects.Entities.ActivistObject" not-null="true"/>
+        <many-to-one name="adminUserObject" column="admin_user_oid"
+                     class="com.elector.Objects.Entities.AdminUserObject" not-null="true"/>
+        <property name="date" column="date" type="java.util.Date"/>
+        <property name="relation" column="relation" type="string"/>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+    </class>
+
+    <class name="com.elector.Objects.Entities.MessageObject" table="messages" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="recipient" column="voter_oid"
+                     class="com.elector.Objects.Entities.VoterObject"/>
+        <property name="type" type="int" column="type"/>
+        <property name="title" type="string" column="title"/>
+        <property name="body" type="string" column="body"/>
+        <property name="date" column="date" type="java.util.Date"/>
+        <property  name="closed" type="boolean">
+            <column name="closed"  default="false"/>
+        </property>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+    </class>
+
+    <class name="com.elector.Objects.Entities.GeocodeCoordinatesObject" table="geocode_coordinates" lazy="true">
+        <cache usage="nonstrict-read-write" />
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property name="address" column="address" type="string"/>
+        <property name="lat" column="lat" type="double"/>
+        <property name="lng" column="lng" type="double"/>
+        <property name="zoom" column="zoom" type="float"/>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+
+    </class>
+
+    <class name="com.elector.Objects.Entities.CampaignObject" table="campaigns" lazy="true">
+        <cache usage="nonstrict-read-write" />
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property name="name" column="name" type="string"/>
+        <property  name="active" type="java.lang.Boolean">
+            <column name="active"  default="true"/>
+        </property>
+        <property name="date" column="date" type="java.util.Date"/>
+        <many-to-one name="coordinatesObject" column="geocode_coordinates_oid"
+                     class="com.elector.Objects.Entities.GeocodeCoordinatesObject"/>
+        <property name="endDate" column="end_date" type="java.util.Date"/>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <property  name="votersBook" type="boolean">
+            <column name="voters_book"  default="false"/>
+        </property>
+        <property  name="clientsCounter" type="int">
+            <column name="client_counter"  default="0"/>
+        </property>
+        <property name="mainCity" column="main_city" type="string"/>
+        <property  name="type" type="int">
+            <column name="type"  default="1"/>
+        </property>
+    </class>
+
+
+    <class name="com.elector.Objects.Entities.AdminUserObject" table="admin_users" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property name="creationDate" column="creation_date" type="java.util.Date"/>
+        <property name="expirationDate" column="expiration_date" type="java.util.Date"/>
+        <property name="name" type="string" column="name"/>
+        <property name="email" type="string" column="email" not-null="true"/>
+        <property name="password" type="string" column="password" not-null="true"/>
+        <many-to-one name="campaignObject" column="campaign_oid"
+                     class="com.elector.Objects.Entities.CampaignObject"/>
+        <property name="type" type="int" column="type" not-null="true"/>
+        <property name="lastLoginDate" type="java.util.Date" column="last_login_date"/>
+        <property name="businessId" type="string" column="business_id"/>
+        <property name="businessName" type="string" column="business_name"/>
+        <property name="maxUsers" type="int" column="max_users" not-null="true"/>
+        <property  name="usersCount" type="int">
+            <column name="users_count"  default="100"/>
+        </property>
+        <property name="mainOfficeAddress" type="string" column="main_office_address"/>
+        <property name="mainOfficePhone" type="string" column="main_office_phone"/>
+        <property name="cost" type="float" column="cost"/>
+        <property name="phone" type="string" column="phone"/>
+        <property name="totalSmsPurchased" type="int" column="total_sms_purchased"/>
+        <property name="usedSms" type="int" column="used_sms"/>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <property name="adminId" type="string" column="admin_id"/>
+        <property  name="active" type="boolean">
+            <column name="active"  default="true"/>
+        </property>
+        <property  name="allowExcelUpload" type="boolean">
+            <column name="allow_excel_upload"  default="false"/>
+        </property>
+        <property  name="votersBookCopied" type="boolean">
+            <column name="voters_book_copied"  default="false"/>
+        </property>
+        <property name="smsSenderName" type="string" column="sms_sender_name"/>
+        <property  name="sendSms" type="boolean">
+            <column name="send_sms"  default="true"/>
+        </property>
+        <property  name="simulation" type="boolean">
+            <column name="simulation"  default="false"/>
+        </property>
+        <property name="callScenario" type="text" column="call_scenario"/>
+        <property name="messagesPage" type="text" column="messages_page"/>
+        <property  name="sendSupporterNotVerifiedSms" type="boolean">
+            <column name="send_supporter_not_verified_sms"  default="false"/>
+        </property>
+        <property  name="sendSupporterNotVerifiedNotification" type="boolean">
+            <column name="send_supporter_not_verified_notification"  default="false"/>
+        </property>
+        <property  name="showActivistsRank" type="boolean">
+            <column name="show_activists_rank"  default="true"/>
+        </property>
+        <property  name="sendSupporterVerifiedSms" type="boolean">
+            <column name="send_supporter_verified_sms"  default="false"/>
+        </property>
+        <property  name="sendSupporterVerifiedNotification" type="boolean">
+            <column name="send_supporter_verified_notification"  default="false"/>
+        </property>
+        <property  name="allowCallersToChangeVotingStatus" type="boolean">
+            <column name="allow_callers_to_change_voting_status"  default="false"/>
+        </property>
+        <property  name="allowAddingSupportersWithoutPhoneNumbers" type="boolean">
+            <column name="allow_adding_supporters_without_phone_numbers"  default="false"/>
+        </property>
+        <property name="electionDayCallScenario" type="text" column="election_day_call_scenario"/>
+        <property  name="electionDayCallsSortType" type="int">
+            <column name="election_day_calls_sort_type"  default="1"/>
+        </property>
+        <property  name="dataEncrypted" type="boolean">
+            <column name="data_encrypted"  default="false"/>
+        </property>
+        <property  name="language" type="int">
+            <column name="language"  default="1"/>
+        </property>
+
+    </class>
+
+    <class name="com.elector.Objects.Entities.BallotBoxObject" table="ballot_boxes" lazy="false">
+        <cache usage="nonstrict-read-write" />
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="campaignObject" column="campaign_oid"
+                     class="com.elector.Objects.Entities.CampaignObject"/>
+        <property name="number" column="number" type="int"/>
+        <property name="address" type="string" column="address"/>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <many-to-one name="cityObject" column="city_oid"
+                     class="com.elector.Objects.Entities.CityObject"/>
+        <property name="place" type="string" column="place"/>
+        <property  name="disabledAccess" type="boolean">
+            <column name="disabled_access"  default="false"/>
+        </property>
+        <property  name="disabledVotingArrangements" type="boolean">
+            <column name="disabled_voting_arrangements"  default="false"/>
+        </property>
+        <property name="district" type="string" column="district"/>
+        <property name="regionalCouncil" type="string" column="regional_council"/>
+    </class>
+
+    <class name="com.elector.Objects.Entities.ObserverObject" table="observers" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property name="firstName" column="first_name" type="string"/>
+        <property name="lastName" column="last_name" type="string"/>
+        <many-to-one name="adminUserObject" column="admin_user_oid"
+                     class="com.elector.Objects.Entities.AdminUserObject"/>
+        <property name="email" column="email" type="string"/>
+        <property name="password" column="password" type="string"/>
+        <property name="phone" column="phone" type="string"/>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <property  name="workOnElectionDay" type="boolean">
+            <column name="works_on_election_day"  default="false"/>
+        </property>
+        <property  name="electionDayMorningShift" type="boolean">
+            <column name="election_day_morning_shift"  default="false"/>
+        </property>
+        <property  name="electionDayEveningShift" type="boolean">
+            <column name="election_day_evening_shift"  default="false"/>
+        </property>
+        <property  name="superObserver" type="boolean">
+            <column name="super_observer"  default="false"/>
+        </property>
+        <many-to-one name="groupManagerObject" column="group_manager_oid"
+                     class="com.elector.Objects.Entities.GroupManagerObject"/>
+        <property  name="language" type="int">
+            <column name="language"  default="1"/>
+        </property>
+    </class>
+
+    <class name="com.elector.Objects.Entities.AdminObserverMapObject" table="admins_observers_map" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="adminUserObject" column="admin_user_oid"
+                     class="com.elector.Objects.Entities.AdminUserObject"/>
+        <many-to-one name="observerObject" column="observer_oid"
+                     class="com.elector.Objects.Entities.ObserverObject"/>
+        <property name="creationDate" column="creation_date" type="java.util.Date"/>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+    </class>
+
+    <class name="com.elector.Objects.Entities.CallerObject" table="callers" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="adminUserObject" column="admin_user_oid"
+                     class="com.elector.Objects.Entities.AdminUserObject"/>
+        <property name="firstName" type="string" column="first_name"/>
+        <property name="lastName" type="string" column="last_name"/>
+        <property name="phone" type="string" column="phone"/>
+        <property name="email" type="string" column="email"/>
+        <property name="password" type="string" column="password"/>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <property  name="accessActivists" type="boolean">
+            <column name="access_activists"  default="false"/>
+        </property>
+        <property  name="accessTasks" type="boolean">
+            <column name="access_tasks"  default="false"/>
+        </property>
+        <property  name="workOnElectionDay" type="boolean">
+            <column name="works_on_election_day"  default="false"/>
+        </property>
+        <property  name="electionDayMorningShift" type="boolean">
+            <column name="election_day_morning_shift"  default="false"/>
+        </property>
+        <property  name="electionDayEveningShift" type="boolean">
+            <column name="election_day_evening_shift"  default="false"/>
+        </property>
+        <many-to-one name="groupManagerObject" column="group_manager_oid"
+                     class="com.elector.Objects.Entities.GroupManagerObject"/>
+        <property  name="language" type="int">
+            <column name="language"  default="1"/>
+        </property>
+
+    </class>
+
+    <class name="com.elector.Objects.Entities.CallerVoterMapObject" table="callers_voters_map" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="callerObject" column="caller_oid"
+                     index="get_callers_voters_map"
+                     class="com.elector.Objects.Entities.CallerObject"/>
+        <many-to-one name="voterObject" column="voter_oid"
+                     class="com.elector.Objects.Entities.VoterObject"/>
+        <many-to-one name="adminUserObject" column="admin_user_oid"
+                     index="get_callers_voters_map"
+                     class="com.elector.Objects.Entities.AdminUserObject"/>
+        <property  name="deleted" type="boolean"
+                   index="get_callers_voters_map">
+            <column name="deleted"  default="false"/>
+        </property>
+
+    </class>
+
+    <class name="com.elector.Objects.Entities.VoterCallObject" table="voters_calls" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="callerObject" column="caller_oid"
+                     class="com.elector.Objects.Entities.CallerObject"/>
+        <many-to-one name="voterObject" column="voter_oid"
+                     class="com.elector.Objects.Entities.VoterObject"/>
+        <property name="time" column="time" type="java.util.Date"/>
+        <property  name="answered" type="boolean" column="answered"/>
+        <property name="previousStatus" column="previous_status" type="int"/>
+        <property name="newStatus" column="new_status" type="int"/>
+        <property name="comment" column="comment" type="string"/>
+        <property name="unansweredReason" type="int" column="unanswered_reason"/>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <property name="referrer" type="int" column="referrer"/>
+    </class>
+
+    <class name="com.elector.Objects.Entities.InnerMessageObject" table="inner_messages" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property name="recipientType" column="recipient_type" type="int"/>
+        <property name="recipientOid" column="recipient_oid" type="int"/>
+        <property name="title" column="title" type="string"/>
+        <property name="body" column="body" type="string"/>
+        <property name="date" column="date" type="java.util.Date"/>
+        <property  name="opened" type="boolean" column="opened"/>
+        <property  name="closed" type="boolean" column="closed"/>
+        <property name="senderType" column="sender_type" type="int"/>
+        <property name="senderOid" column="sender_oid" type="int"/>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+    </class>
+
+    <class name="com.elector.Objects.Entities.CandidateMessageObject" table="candidate_messages" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="adminUserObject" column="admin_user_oid"
+                     class="com.elector.Objects.Entities.AdminUserObject"/>
+        <property name="title" column="title" type="string"/>
+        <property name="body" column="body" type="text"/>
+        <property name="date" column="date" type="java.util.Date"/>
+        <property  name="opened" type="boolean" column="opened"/>
+        <property  name="closed" type="boolean" column="closed"/>
+        <property  name="type" type="int">
+            <column name="type"  default="0"/>
+        </property>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <property  name="senderOid" type="int" column="sender_oid" />
+        <property  name="senderType" type="int" column="sender_type" />
+        <many-to-one name="subjectVoter" column="subject_voter_oid"
+                     class="com.elector.Objects.Entities.VoterObject"/>
+        <many-to-one name="groupManagerObject" column="group_manager_oid"
+                     class="com.elector.Objects.Entities.GroupManagerObject"/>
+    </class>
+
+    <class name="com.elector.Objects.Entities.ActivistObject" table="activists" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="adminUserObject" column="admin_user_oid"
+                     class="com.elector.Objects.Entities.AdminUserObject"/>
+        <property name="phone" type="string" column="phone"/>
+        <property name="password" type="string" column="password"/>
+        <property name="firstName" type="string" column="first_name" not-null="true"/>
+        <property name="lastName" type="string" column="last_name" not-null="true"/>
+        <property name="birthDate" column="birth_date" type="java.util.Date"/>
+        <property name="email" column="email" type="string"/>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <property  name="allowExcelUpload" type="boolean">
+            <column name="allow_excel_upload"  default="false"/>
+        </property>
+        <property name="mobileRegistrationToken" column="mobile_registration_token" type="string"/>
+        <property  name="autoVerifySupporters" type="boolean">
+            <column name="auto_verify_supporters"  default="false"/>
+        </property>
+        <property  name="workOnElectionDay" type="boolean">
+            <column name="works_on_election_day"  default="false"/>
+        </property>
+        <property  name="allowAccessToSupportStatus" type="boolean">
+            <column name="allow_access_to_support_status"  default="false"/>
+        </property>
+        <property  name="allowEditVoteStatus" type="boolean">
+            <column name="allow_edit_vote_status"  default="false"/>
+        </property>
+        <many-to-one name="groupManagerObject" column="group_manager_oid"
+                     class="com.elector.Objects.Entities.GroupManagerObject"/>
+        <property  name="language" type="int">
+            <column name="language"  default="1"/>
+        </property>
+    </class>
+
+
+    <class name="com.elector.Objects.Entities.CandidateDataDailyObject" table="candidate_data_daily" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="adminUserObject" column="admin_user_oid"
+                     class="com.elector.Objects.Entities.AdminUserObject"/>
+        <property name="date" column="date" type="java.util.Date"/>
+        <property name="supportingCount" type="int" column="supporting_count"/>
+        <property name="notSupportingCount" type="int" column="not_supporting_count"/>
+        <property name="unknownSupportCount" type="int" column="unknown_support_count"/>
+        <property  name="unverifiedSupportingCount" type="int">
+            <column name="unverified_supporting_count"  default="0"/>
+        </property>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <many-to-one name="groupManagerObject" column="group_manager_oid"
+                     class="com.elector.Objects.Entities.GroupManagerObject"/>
+    </class>
+
+    <class name="com.elector.Objects.Entities.SentEmailObject" table="sent_emails" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property name="from" type="string" column="sender"/>
+        <property name="recipient" type="string" column="recipient"/>
+        <property name="subject" type="string" column="subject"/>
+        <property name="text" type="text" column="body"/>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <property name="date" column="date" type="java.util.Date"/>
+    </class>
+
+    <class name="com.elector.Objects.Entities.VoterElectionDayCallObject" table="voters_election_day_calls" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="callerObject" column="caller_oid"
+                     class="com.elector.Objects.Entities.CallerObject"/>
+        <many-to-one name="voterObject" column="voter_oid"
+                     class="com.elector.Objects.Entities.VoterObject"/>
+        <property name="time" column="time" type="java.util.Date"/>
+        <property  name="answered" type="boolean">
+            <column name="answered"  default="false"/>
+        </property>
+        <property name="comment" column="comment" type="string"/>
+        <property name="voteStatus" column="vote_status" type="int"/>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+    </class>
+
+    <class name="com.elector.Objects.Entities.RivalObject" table="rivals" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property name="name" column="name" type="string"/>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+    </class>
+
+    <class name="com.elector.Objects.Entities.ActivistElectionDayCallObject" table="activist_election_day_calls" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property name="comment" column="comment" type="string"/>
+        <property name="time" column="time" type="java.util.Date"/>
+        <many-to-one name="activistObject" column="activist_oid"
+                     class="com.elector.Objects.Entities.ActivistObject"/>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+    </class>
+
+    <class name="com.elector.Objects.Entities.SentSmsObject" table="sent_sms" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property name="recipientPhone" column="recipient_phone" type="string"/>
+        <property name="senderPhone" column="sender_phone" type="string"/>
+        <property name="text" column="text" type="string"/>
+        <many-to-one name="adminUserObject" column="admin_user_oid"
+                     class="com.elector.Objects.Entities.AdminUserObject"/>
+        <property  name="success" type="java.lang.Boolean">
+            <column name="success"  default="true"/>
+        </property>
+        <property name="time" column="time" type="java.util.Date"/>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <property name="contactOid" column="contact_oid" type="int"/>
+        <property name="contactType" column="contact_type" type="int"/>
+        <property name="fullName" column="full_name" type="string"/>
+        <property  name="allowSend" type="boolean">
+            <column name="allow_send"  default="false"/>
+        </property>
+        <many-to-one name="groupManagerObject" column="group_manager_oid"
+                     class="com.elector.Objects.Entities.GroupManagerObject"/>
+    </class>
+
+    <class name="com.elector.Objects.Entities.ElectionDayAlert" table="election_day_alerts" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="adminUserObject" column="admin_user_oid"
+                     class="com.elector.Objects.Entities.AdminUserObject"/>
+        <property name="time" column="time" type="java.util.Date"/>
+        <property name="senderType" column="sender_type" type="int"/>
+        <property name="senderOid" column="sender_oid" type="int"/>
+        <property name="text" column="text" type="string"/>
+        <property  name="handled" type="boolean">
+            <column name="handled"  default="false"/>
+        </property>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <many-to-one name="voterObject" column="voter_oid"
+                     class="com.elector.Objects.Entities.VoterObject"/>
+        <property  name="simulation" type="boolean">
+            <column name="simulation"  default="false"/>
+        </property>
+
+    </class>
+
+    <class name="com.elector.Objects.Entities.DriverObject" table="drivers" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="adminUserObject" column="admin_user_oid"
+                     class="com.elector.Objects.Entities.AdminUserObject"/>
+        <property name="firstName" type="string" column="first_name" not-null="true"/>
+        <property name="lastName" type="string" column="last_name" not-null="true"/>
+        <property name="phone" type="string" column="phone"/>
+        <property name="password" type="string" column="password"/>
+        <property name="location" type="string" column="location"/>
+        <property  name="available" type="boolean">
+            <column name="available"  default="false"/>
+        </property>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <property  name="workOnElectionDay" type="boolean">
+            <column name="works_on_election_day"  default="false"/>
+        </property>
+        <property  name="checkedIn" type="boolean">
+            <column name="checked_in"  default="false"/>
+        </property>
+        <many-to-one name="groupManagerObject" column="group_manager_oid"
+                     class="com.elector.Objects.Entities.GroupManagerObject"/>
+        <property  name="language" type="int">
+            <column name="language"  default="1"/>
+        </property>
+    </class>
+
+    <class name="com.elector.Objects.Entities.SupporterBillboardRequestObject" table="supporters_billboard_requests" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="supporter" column="voter_oid"
+                     class="com.elector.Objects.Entities.VoterObject"/>
+        <property name="initiatorType" column="initiator_type" type="int"/>
+        <property name="initiatorOid" column="initiator_oid" type="int"/>
+        <property name="creationDate" column="creation_date" type="java.util.Date"/>
+        <property name="timeToCome" column="time_to_come" type="java.util.Date"/>
+        <property name="extraDetails" type="string" column="extra_details"/>
+        <property  name="done" type="boolean">
+            <column name="done"  default="false"/>
+        </property>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+
+    </class>
+
+    <class name="com.elector.Objects.Entities.SupporterElectionAssemblyRequestObject" table="supporters_election_assemblies_requests" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="supporter" column="voter_oid"
+                     class="com.elector.Objects.Entities.VoterObject"/>
+        <property name="initiatorType" column="initiator_type" type="int"/>
+        <property name="initiatorOid" column="initiator_oid" type="int"/>
+        <property name="creationDate" column="creation_date" type="java.util.Date"/>
+        <property name="desiredDate" column="desired_date" type="java.util.Date"/>
+        <property name="extraDetails" type="string" column="extra_details"/>
+        <property  name="done" type="boolean">
+            <column name="done"  default="false"/>
+        </property>
+        <property name="estimatedParticipantsCount" type="int" column="estimated_participants_count"/>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+    </class>
+
+    <class name="com.elector.Objects.Entities.ElectionAssemblyObject" table="election_assemblies" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property name="date" column="date" type="java.util.Date"/>
+        <property name="title" column="title" type="string"/>
+        <property name="description" column="description" type="string"/>
+        <many-to-one name="supporter" column="voter_oid"
+                     class="com.elector.Objects.Entities.VoterObject"/>
+        <many-to-one name="adminUserObject" column="admin_user_oid"
+                     class="com.elector.Objects.Entities.AdminUserObject"/>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <property name="address" column="address" type="string"/>
+        <property name="extraDetails" column="extra_details" type="string"/>
+        <property name="estimatedParticipantsCount" type="int" column="estimated_participants_count"/>
+
+    </class>
+
+    <class name="com.elector.Objects.Entities.SupporterBirthdayObject" table="supporters_birthdays" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property name="date" column="date" type="java.util.Date"/>
+        <property name="title" column="title" type="string"/>
+        <property name="description" column="description" type="string"/>
+        <many-to-one name="supporter" column="voter_oid"
+                     class="com.elector.Objects.Entities.VoterObject"/>
+        <many-to-one name="adminUserObject" column="admin_user_oid"
+                     class="com.elector.Objects.Entities.AdminUserObject"/>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+
+    </class>
+
+    <class name="com.elector.Objects.Entities.PendingVoterObject" table="pending_voters" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property name="voterId" type="string" column="voter_id" not-null="true"/>
+        <property name="firstName" type="string" column="first_name" not-null="true"/>
+        <property name="lastName" type="string" column="last_name" not-null="true"/>
+        <property name="address" type="string">
+            <column name="address"/>
+        </property>
+        <property name="phone" type="string" column="phone"/>
+        <property name="birthDate" column="birth_date" type="java.util.Date"/>
+        <property name="email" type="string" column="email"/>
+        <many-to-one name="adminUserObject" column="admin_user_oid"
+                     class="com.elector.Objects.Entities.AdminUserObject"/>
+        <property  name="male" type="java.lang.Boolean">
+            <column name="male"/>
+        </property>
+        <property name="duplicateDate" column="duplicate_date" type="java.util.Date"/>
+        <property  name="supportStatus" type="int">
+            <column name="support_status"  default="0" not-null="true"/>
+        </property>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+    </class>
+
+    <class name="com.elector.Objects.Entities.CustomGroupObject" table="custom_groups" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property name="description" type="string" column="description"/>
+        <many-to-one name="adminUserObject" column="admin_user_oid"
+                     class="com.elector.Objects.Entities.AdminUserObject"/>
+        <property name="size" type="int" column="size"/>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <many-to-one name="groupManagerObject" column="group_manager_oid"
+                     class="com.elector.Objects.Entities.GroupManagerObject"/>
+
+    </class>
+
+    <class name="com.elector.Objects.Entities.VoterCustomGroupMappingObject" table="voters_custom_groups_mapping" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="voterObject" column="voter_oid"
+                     class="com.elector.Objects.Entities.VoterObject"/>
+        <many-to-one name="customGroupObject" column="custom_group_oid"
+                     class="com.elector.Objects.Entities.CustomGroupObject"/>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+    </class>
+
+    <class name="com.elector.Objects.Entities.DonationObject" table="donations" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="adminUserObject" column="admin_user_oid"
+                     class="com.elector.Objects.Entities.AdminUserObject"/>
+        <property name="sum" column="sum" type="double"/>
+        <property name="date" column="date" type="java.util.Date"/>
+        <property name="donorId" type="string" column="donor_id"/>
+        <property name="donorFirstName" type="string" column="donor_first_Name"/>
+        <property name="donorLastName" type="string" column="donor_last_name"/>
+        <property name="donorBirthDate" column="donor_birth_date" type="java.util.Date"/>
+        <property name="donorAddress" type="string" column="donor_address"/>
+        <property name="donorPhone" type="string" column="donor_phone"/>
+        <property name="relationToDonor" type="string" column="relation_to_donor"/>
+        <property  name="paymentConfirmationImage" type="boolean">
+            <column name="payment_confirmation_image"  default="false"/>
+        </property>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+    </class>
+
+    <class name="com.elector.Objects.Entities.ContactsGroupObject" table="contacts_groups" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="adminUserObject" column="admin_user_oid"
+                     class="com.elector.Objects.Entities.AdminUserObject"/>
+        <property name="creationDate" column="date" type="java.util.Date"/>
+        <property name="groupId" column="group_id" type="int"/>
+        <property name="name" column="name" type="string"/>
+        <property name="description" column="description" type="string"/>
+        <property name="nameInService" column="name_in_service" type="string"/>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+    </class>
+
+    <class name="com.elector.Objects.Entities.CampaignVoterObject" table="campaign_voters" lazy="false">
+        <cache usage="nonstrict-read-write" />
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property name="firstName" column="first_name" type="string"/>
+        <property name="lastName" column="last_name" type="string"/>
+        <property name="voterId" column="voter_id" type="string"/>
+        <many-to-one name="campaignObject" column="campaign_oid"
+                     class="com.elector.Objects.Entities.CampaignObject"/>
+        <many-to-one name="ballotBoxObject" column="ballot_box_oid"
+                     class="com.elector.Objects.Entities.BallotBoxObject"/>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <property name="fatherName" column="father_name" type="string"/>
+        <property name="street" column="street" type="string"/>
+        <property name="houseNumber" column="house_number" type="string"/>
+        <property name="apartmentNumber" column="apartment_number" type="string"/>
+        <property name="voterNumber" column="voter_number" type="int"/>
+        <property name="ballotBoxNumber" type="string" column="ballot_box_number"/>
+        <many-to-one name="cityObject" column="city_oid"
+                     class="com.elector.Objects.Entities.CityObject"/>
+
+    </class>
+
+    <class name="com.elector.Objects.Entities.AliasObject" table="aliases" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property name="source" column="source" type="string"/>
+        <property name="aliases" column="aliases" type="string"/>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+    </class>
+
+    <class name="com.elector.Objects.Entities.SupporterVolunteerObject" table="supporters_volunteers" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="supporter" column="voter_oid"
+                     class="com.elector.Objects.Entities.VoterObject"/>
+        <property name="initiatorType" column="initiator_type" type="int"/>
+        <property name="initiatorOid" column="initiator_oid" type="int"/>
+        <property name="creationDate" column="creation_date" type="java.util.Date"/>
+        <property  name="done" type="boolean">
+            <column name="done"  default="false"/>
+        </property>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <property  name="mobile" type="boolean">
+            <column name="mobile"  default="false"/>
+        </property>
+        <property name="role" type="string" column="role"/>
+
+    </class>
+
+    <class name="com.elector.Objects.Entities.CityObject" table="cities" lazy="false">
+        <cache usage="nonstrict-read-write" />
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <property name="name" column="name" type="string"/>
+        <property name="symbol" column="symbol" type="string"/>
+        <property name="aliases" column="aliases" type="string"/>
+    </class>
+
+
+    <class name="com.elector.Objects.Entities.StreetObject" table="streets" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <property name="name" column="name" type="string"/>
+        <property name="symbol" column="symbol" type="string"/>
+        <many-to-one name="city" column="city_oid"
+                     class="com.elector.Objects.Entities.CityObject"/>
+
+    </class>
+
+    <class name="com.elector.Objects.Entities.CampaignCityMapObject" table="campaigns_cities_map" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <many-to-one name="campaignObject" column="campaign_oid"
+                     class="com.elector.Objects.Entities.CampaignObject"/>
+        <many-to-one name="cityObject" column="city_oid"
+                     class="com.elector.Objects.Entities.CityObject"/>
+
+    </class>
+
+    <class name="com.elector.Objects.Entities.VisitObject" table="visits" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <property name="ip" column="ip" type="string"/>
+        <property name="referrer" column="referrer" type="string"/>
+        <property name="date" column="date" type="java.util.Date"/>
+    </class>
+
+    <class name="com.elector.Objects.Entities.VisitorObject" table="visitors" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <property name="email" column="email" type="string"/>
+        <property name="name" column="name" type="string"/>
+        <property name="phone" column="phone" type="string"/>
+        <property name="date" column="date" type="java.util.Date"/>
+    </class>
+
+    <class name="com.elector.Objects.Entities.SupporterVotersListItemMapObject" table="supporter_voters_list_items_map" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <many-to-one name="supporter" column="supporter_oid"
+                     class="com.elector.Objects.Entities.VoterObject"/>
+        <many-to-one name="supporterFromList" column="supporter_from_list"
+                     class="com.elector.Objects.Entities.VoterObject"/>
+        <property name="date" column="date" type="java.util.Date"/>
+    </class>
+
+    <class name="com.elector.Objects.Entities.SupporterSupportersListDelivery" table="supporters_lists_delivery" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="supporter" column="voter_oid"
+                     class="com.elector.Objects.Entities.VoterObject"/>
+        <property name="initiatorType" column="initiator_type" type="int"/>
+        <property name="initiatorOid" column="initiator_oid" type="int"/>
+        <property name="creationDate" column="creation_date" type="java.util.Date"/>
+        <property  name="done" type="boolean">
+            <column name="done"  default="false"/>
+        </property>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <property  name="firstList" type="boolean">
+            <column name="first_list"  default="false"/>
+        </property>
+
+    </class>
+
+    <class name="com.elector.Objects.Entities.SupporterCarStickerObject" table="supporters_car_stickers" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="supporter" column="voter_oid"
+                     class="com.elector.Objects.Entities.VoterObject"/>
+        <property name="initiatorType" column="initiator_type" type="int"/>
+        <property name="initiatorOid" column="initiator_oid" type="int"/>
+        <property name="creationDate" column="creation_date" type="java.util.Date"/>
+        <property name="timeToCome" column="time_to_come" type="java.util.Date"/>
+        <property name="extraDetails" type="string" column="extra_details"/>
+        <property  name="done" type="boolean">
+            <column name="done"  default="false"/>
+        </property>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <property name="carNumber" type="string" column="car_nubmer"/>
+
+    </class>
+
+    <class name="com.elector.Objects.Entities.RamUsageObject" table="ram_usage" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property name="date" column="date" type="java.util.Date"/>
+        <property name="totalMb" column="total_mb" type="long"/>
+        <property name="freeMb" column="free_mb" type="long"/>
+        <property name="usedMb" column="used_mb" type="long"/>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+    </class>
+
+    <class name="com.elector.Objects.Entities.BallotBoxRoomObject" table="ballot_boxes_rooms" lazy="false">
+        <cache usage="nonstrict-read-write" />
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="ballotBoxObject" column="ballot_box_oid"
+                     class="com.elector.Objects.Entities.BallotBoxObject"/>
+        <property name="street" type="string" column="street"/>
+        <property name="type" column="type" type="int"/>
+        <property name="fromHouse" column="fromHouse" type="int"/>
+        <property name="toHouse" column="to_house" type="int"/>
+        <property name="fromLetter" type="string" column="from_letter"/>
+        <property name="toLetter" type="string" column="to_letter"/>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+    </class>
+
+    <class name="com.elector.Objects.Entities.ObserverBallotBoxMapObject" table="observers_ballot_boxes_map" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="observerObject" column="observer_oid"
+                     class="com.elector.Objects.Entities.ObserverObject"/>
+        <many-to-one name="ballotBoxObject" column="ballot_box_oid"
+                     class="com.elector.Objects.Entities.BallotBoxObject"/>
+        <many-to-one name="adminUserObject" column="admin_user_oid"
+                     class="com.elector.Objects.Entities.AdminUserObject"/>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <property  name="checkedIn" type="boolean">
+            <column name="checked_in"  default="false"/>
+        </property>
+    </class>
+
+    <class name="com.elector.Objects.Entities.ActivistMasterSlaveMapObject" table="activists_masters_slaves_map" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="master" column="master_oid"
+                     class="com.elector.Objects.Entities.ActivistObject"/>
+        <many-to-one name="slave" column="slave_oid"
+                     class="com.elector.Objects.Entities.ActivistObject"/>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+    </class>
+
+    <class name="com.elector.Objects.Entities.BallotBoxBlockObject" table="ballot_boxes_blocks" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property name="name" type="string" column="name"/>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <many-to-one name="adminUserObject" column="admin_user_oid"
+                     class="com.elector.Objects.Entities.AdminUserObject"/>
+    </class>
+
+    <class name="com.elector.Objects.Entities.BallotBoxBlockMapObject" table="ballot_boxes_blocks_map" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="ballotBoxObject" column="ballot_box_oid"
+                     class="com.elector.Objects.Entities.BallotBoxObject"/>
+        <many-to-one name="ballotBoxBlockObject" column="ballot_box_block_oid"
+                     class="com.elector.Objects.Entities.BallotBoxBlockObject"/>
+        <many-to-one name="adminUserObject" column="admin_user_oid"
+                     class="com.elector.Objects.Entities.AdminUserObject"/>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+    </class>
+
+    <class name="com.elector.Objects.Entities.CustomPropertyObject" table="custom_properties" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property name="type" type="int" column="type"/>
+        <property name="name" type="string" column="name"/>
+        <property name="translationKey" type="string" column="translation_key"/>
+        <property name="jsonKey" type="string" column="json_key"/>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+    </class>
+
+    <class name="com.elector.Objects.Entities.AdminCustomPropertyMapObject" table="admin_custom_properties_map" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="adminUserObject" column="admin_user_oid"
+                     class="com.elector.Objects.Entities.AdminUserObject"/>
+        <many-to-one name="customPropertyObject" column="custom_property_oid"
+                     class="com.elector.Objects.Entities.CustomPropertyObject"/>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+    </class>
+
+    <class name="com.elector.Objects.Entities.VoterCustomPropertyObject" table="voters_custom_properties" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="voterObject" column="voter_oid"
+                     class="com.elector.Objects.Entities.VoterObject"/>
+        <many-to-one name="customPropertyObject" column="custom_property_oid"
+                     class="com.elector.Objects.Entities.CustomPropertyObject"/>
+        <property name="value" type="string" column="value"/>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+    </class>
+
+    <class name="com.elector.Objects.Entities.CustomPropertyOptionObject" table="custom_properties_options" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="customPropertyObject" column="custom_property_oid"
+                     class="com.elector.Objects.Entities.CustomPropertyObject"/>
+        <property name="translationKey" type="string" column="translation_key"/>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+    </class>
+
+    <class name="com.elector.Objects.Entities.VoterFamilyMemberMapObject" table="voters_family_members_map" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="sourceVoter" column="source_voter_oid"
+                     class="com.elector.Objects.Entities.VoterObject"/>
+        <many-to-one name="familyMember" column="family_member_oid"
+                     class="com.elector.Objects.Entities.VoterObject"/>
+        <property name="relation" type="int" column="relation"/>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+    </class>
+
+    <class name="com.elector.Objects.Entities.LogObject" table="logs" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <property  name="type" type="int" column="type"/>
+        <property name="date" column="date" type="java.util.Date"/>
+        <property name="text" column="text" type="text"/>
+        <property  name="userType" type="int" column="user_type"/>
+        <property  name="userOid" type="int" column="user_oid"/>
+    </class>
+
+    <class name="com.elector.Objects.Entities.InvalidAddressObject" table="invalid_addresses" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <property name="address" column="address" type="text"/>
+    </class>
+
+    <class name="com.elector.Objects.Entities.LoginObject" table="logins" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property name="date" column="date" type="java.util.Date"/>
+        <property  name="userType" type="int" column="user_type"/>
+        <property  name="userOid" type="int" column="user_oid"/>
+        <property  name="web" type="boolean">
+            <column name="web"  default="false"/>
+        </property>
+        <property  name="ip" type="string" column="ip"/>
+    </class>
+
+    <class name="com.elector.Objects.Entities.ExportObject" table="exports" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property name="date" column="date" type="java.util.Date"/>
+        <many-to-one name="adminUserObject" column="admin_user_oid"
+                     class="com.elector.Objects.Entities.AdminUserObject" not-null="true"/>
+        <property  name="reportType" type="int" column="report_type"/>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+
+    </class>
+
+    <class name="com.elector.Objects.Entities.ActivistDataDailyObject" table="activist_data_daily" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property name="date" column="date" type="java.util.Date"/>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <property  name="supportersCount" type="int" column="supporters_count"/>
+        <property  name="rank" type="int" column="rank"/>
+        <many-to-one name="activistObject" column="activist_oid"
+                     class="com.elector.Objects.Entities.ActivistObject" not-null="true"/>
+        <property  name="dailyRank" type="int" column="daily_rank"/>
+
+    </class>
+
+    <class name="com.elector.Objects.Entities.NotificationObject" table="notifications" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property name="date" column="date" type="java.util.Date"/>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <property name="title" type="string" column="title"/>
+        <property name="body" type="string" column="body"/>
+        <many-to-one name="adminUserObject" column="admin_user_oid"
+                     class="com.elector.Objects.Entities.AdminUserObject" not-null="true"/>
+    </class>
+
+
+    <class name="com.elector.Objects.Entities.RequestStatsObject" table="requests_stats" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <property name="uri" type="string" column="uri"/>
+        <property name="count" type="int" column="count"/>
+        <property name="lastRequestDate" column="last_request_date" type="java.util.Date"/>
+        <property name="firstRequestDate" column="first_request_date" type="java.util.Date"/>
+    </class>
+
+    <class name="com.elector.Objects.Entities.SupportStatusChangeObject" table="support_status_changes" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <many-to-one name="voterObject" column="voter_oid"
+                     class="com.elector.Objects.Entities.VoterObject" not-null="true"/>
+        <property name="date" column="date" type="java.util.Date"/>
+        <property name="previousStatus" type="int" column="previous_status"/>
+        <property name="newStatus" type="int" column="new_status"/>
+        <property name="initiatorType" type="int" column="initiator_type"/>
+        <property name="initiatorOid" type="int" column="initiator_oid"/>
+        <property name="method" type="string" column="method"/>
+    </class>
+
+    <class name="com.elector.Objects.Entities.MobileUserObject" table="mobile_users" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <property  name="android" type="boolean">
+            <column name="android"  default="true"/>
+        </property>
+        <property name="userOid" type="int" column="user_oid"/>
+        <property name="userType" type="int" column="user_type"/>
+        <property name="uuid" type="string" column="uuid"/>
+        <property name="device" type="string" column="device"/>
+        <property name="phone" type="string" column="phone"/>
+        <property name="version" type="string" column="version"/>
+    </class>
+
+    <class name="com.elector.Objects.Entities.SupporterElectionAssemblyParticipationObject" table="supporters_election_assemblies_participations" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="supporter" column="voter_oid"
+                     class="com.elector.Objects.Entities.VoterObject"/>
+        <property name="initiatorType" column="initiator_type" type="int"/>
+        <property name="initiatorOid" column="initiator_oid" type="int"/>
+        <property name="creationDate" column="creation_date" type="java.util.Date"/>
+        <property name="extraDetails" type="string" column="extra_details"/>
+        <property  name="done" type="boolean">
+            <column name="done"  default="false"/>
+        </property>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <property name="preferredArea" type="string" column="preferred_area"/>
+
+    </class>
+
+    <class name="com.elector.Objects.Entities.VotingStatusChangeObject" table="voting_status_changes" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <many-to-one name="voterObject" column="voter_oid"
+                     class="com.elector.Objects.Entities.VoterObject" not-null="true"/>
+        <property name="date" column="date" type="java.util.Date"/>
+        <property name="previousStatus" type="boolean" column="previous_status"/>
+        <property name="newStatus" type="boolean" column="new_status"/>
+        <property name="initiatorType" type="int" column="initiator_type"/>
+        <property name="initiatorOid" type="int" column="initiator_oid"/>
+        <property name="round" type="int" column="round"/>
+        <property name="simulation" type="boolean" column="simulation"/>
+        <property name="adminOid" type="int" column="admin_oid"/>
+    </class>
+
+    <class name="com.elector.Objects.Entities.ObserverCheckInObject" table="observers_check_ins" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <many-to-one name="observerObject" column="observer_oid"
+                     class="com.elector.Objects.Entities.ObserverObject" not-null="true"/>
+        <property name="date" column="date" type="java.util.Date"/>
+        <property  name="checkIn" type="boolean">
+            <column name="check_in"  default="false"/>
+        </property>
+    </class>
+
+    <class name="com.elector.Objects.Entities.LaborParty.IsraelLaborPartyVoterObject" table="israel_labor_party_voters" lazy="false">
+        <cache usage="nonstrict-read-write" />
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property name="firstName" column="first_name" type="string"/>
+        <property name="lastName" column="last_name" type="string"/>
+        <property name="voterId" column="voter_id" type="string"/>
+        <property name="phone" column="phone" type="string"/>
+        <property name="branch" column="branch" type="string"/>
+        <property name="activityDistrict" column="activity_district" type="string"/>
+        <property name="activityBranch" column="activity_branch" type="string"/>
+        <property name="birthDate" column="birth_date" type="java.util.Date"/>
+        <many-to-one name="cityObject" column="city_oid"
+                     class="com.elector.Objects.Entities.CityObject"/>
+        <property name="street" column="street" type="string"/>
+        <property name="houseNumber" type="string" column="house_number"/>
+        <property name="zipCode" type="int" column="zip_code"/>
+        <many-to-one name="officeCityObject" column="office_city_oid"
+                     class="com.elector.Objects.Entities.CityObject"/>
+        <property name="officeStreet" column="office_street" type="string"/>
+        <property name="officeHouseNumber" column="office_house_number" type="string"/>
+        <property name="officeZipCode" type="int" column="office_zip_code"/>
+        <many-to-one name="campaignObject" column="campaign_oid"
+                     class="com.elector.Objects.Entities.CampaignObject"/>
+        <many-to-one name="ballotBoxObject" column="ballot_box_oid"
+                     class="com.elector.Objects.Entities.BallotBoxObject"/>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <property name="extraPhone" type="string" column="extra_phone"/>
+        <property name="partyBranch" type="string" column="party_branch"/>
+    </class>
+
+    <class name="com.elector.Objects.Entities.LikudParty.LikudPartyVoterObject" table="likud_party_voters" lazy="false">
+        <cache usage="nonstrict-read-write" />
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property name="firstName" column="first_name" type="string"/>
+        <property name="lastName" column="last_name" type="string"/>
+        <property name="voterId" column="voter_id" type="string"/>
+        <many-to-one name="campaignObject" column="campaign_oid"
+                     class="com.elector.Objects.Entities.CampaignObject"/>
+        <many-to-one name="ballotBoxObject" column="ballot_box_oid"
+                     class="com.elector.Objects.Entities.BallotBoxObject"/>
+        <many-to-one name="cityObject" column="city_oid"
+                     class="com.elector.Objects.Entities.CityObject"/>
+        <property name="street" column="street" type="string"/>
+        <property name="houseNumber" type="string" column="house_number"/>
+        <property name="zipCode" type="int" column="zip_code"/>
+        <property name="collectionCode" type="int" column="collection_code"/>
+        <property name="collectionDescription" type="string" column="collection_description"/>
+        <property name="phone" column="phone" type="string"/>
+        <property name="homePhone" column="home_phone" type="string"/>
+        <property name="joinDate" column="join_date" type="java.util.Date"/>
+        <property name="birthCountry" column="birth_country" type="string"/>
+        <many-to-one name="branchCity" column="branch_city_oid"
+                     class="com.elector.Objects.Entities.CityObject"/>
+        <property name="primaryArea" column="primary_area" type="string"/>
+        <property  name="male" type="java.lang.Boolean">
+            <column name="male"/>
+        </property>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <property name="branch" column="branch" type="string"/>
+    </class>
+
+
+
+    <class name="com.elector.Objects.Entities.PublicInquiryTopicObject" table="public_inquiries_topics" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property name="description" type="string" column="description"/>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+    </class>
+
+    <class name="com.elector.Objects.Entities.ContactObject" table="contacts" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <property name="phone" column="phone" type="string"/>
+        <property name="email" column="email" type="string"/>
+        <property name="firstName" column="first_name" type="string"/>
+        <property name="lastName" column="last_name" type="string"/>
+        <many-to-one name="adminUserObject" column="admin_user_oid"
+                     class="com.elector.Objects.Entities.AdminUserObject" not-null="true"/>
+    </class>
+
+    <class name="com.elector.Objects.Entities.PublicInquiryObject" table="public_inquiries" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <many-to-one name="publicInquiryTopicObject" column="public_inquiry_topic_oid"
+                     class="com.elector.Objects.Entities.PublicInquiryTopicObject" not-null="true"/>
+        <many-to-one name="contactObject" column="contact_oid"
+                     class="com.elector.Objects.Entities.ContactObject" not-null="true"/>
+        <property name="details" column="details" type="text"/>
+        <property  name="open" type="boolean">
+            <column name="open"  default="true"/>
+        </property>
+        <property name="comment" column="comment" type="text"/>
+        <property name="subject" column="subject" type="string"/>
+        <property name="creationDate" column="creation_date" type="java.util.Date"/>
+        <property name="closeDate" column="close_date" type="java.util.Date"/>
+        <many-to-one name="voterObject" column="voter_oid"
+                     class="com.elector.Objects.Entities.VoterObject"/>
+
+    </class>
+
+    <class name="com.elector.Objects.Entities.AdminPublicInquiriesTopicsMapObject" table="admin_public_inquiries_topics_map" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <many-to-one name="adminUserObject" column="admin_user_oid"
+                     class="com.elector.Objects.Entities.AdminUserObject" not-null="true"/>
+        <many-to-one name="publicInquiryTopicObject" column="public_inquiry_topic_oid"
+                     class="com.elector.Objects.Entities.PublicInquiryTopicObject" not-null="true"/>
+
+    </class>
+
+    <class name="com.elector.Objects.Entities.LaborParty.IsraelLaborVoterEditableDataObject" table="israel_labor_voters_editable_data" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <property name="activityDistrict" column="activity_district" type="string"/>
+        <property name="activityBranch" column="activity_branch" type="string"/>
+        <property name="partyDistrict" column="party_district" type="string"/>
+    </class>
+
+    <class name="com.elector.Objects.Entities.LikudParty.LikudVoterEditableDataObject" table="likud_voters_editable_data" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <property name="collectionCode" column="collectionCode" type="int"/>
+        <property name="birthCountry" column="birth_country" type="string"/>
+    </class>
+
+
+    <class name="com.elector.Objects.Entities.ExcelUploadObject" table="excel_uploads" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <property name="date" column="date" type="java.util.Date"/>
+        <property name="userType" column="user_type" type="int"/>
+        <property name="userOid" column="user_oid" type="int"/>
+        <property name="action" column="action" type="int"/>
+        <property name="totalIds" column="total_ids" type="int"/>
+        <property name="nonExistingIds" column="non_existing_ids" type="int"/>
+        <property name="extraInfo" column="extra_info" type="string"/>
+        <many-to-one name="adminUserObject" column="admin_user_oid"
+                     class="com.elector.Objects.Entities.AdminUserObject" not-null="true"/>
+
+    </class>
+
+    <class name="com.elector.Objects.Entities.DynamicGroupObject" table="dynamic_groups" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <many-to-one name="adminUserObject" column="admin_user_oid"
+                     class="com.elector.Objects.Entities.AdminUserObject" not-null="true"/>
+        <property name="title" column="title" type="string"/>
+        <property name="creationDate" column="creation_date" type="java.util.Date"/>
+        <property name="statsTime" column="stats_time" type="java.util.Date"/>
+        <property  name="totalVoters" type="int">
+            <column name="total_voters"  default="0"/>
+        </property>
+        <property  name="totalSupporters" type="int">
+            <column name="total_supporters"  default="0"/>
+        </property>
+        <property  name="totalUnverifiedSupporters" type="int">
+            <column name="total_unverified_supporters"  default="0"/>
+        </property>
+        <property  name="totalUnknownSupportStatus" type="int">
+            <column name="total_unknown_support_status"  default="0"/>
+        </property>
+        <property  name="totalNotSupporting" type="int">
+            <column name="total_not_supporting"  default="0"/>
+        </property>
+        <property name="firstName" column="first_name" type="string"/>
+        <property name="lastName" column="last_name" type="string"/>
+        <property name="voterId" column="voter_id" type="string"/>
+        <property name="address" column="address" type="string"/>
+        <property name="supportStatus" column="support_status" type="int"/>
+        <property name="phone" column="phone" type="string"/>
+        <property name="homePhone" column="home_phone" type="string"/>
+        <property name="extraPhone" column="extra_phone" type="string"/>
+        <property name="email" column="email" type="string"/>
+        <property name="gender" column="gender" type="int"/>
+        <property name="comment" column="comment" type="string"/>
+        <property name="language" column="language" type="int"/>
+        <property name="supportSign" column="support_sign" type="int"/>
+        <property name="allowRecall" column="allow_recall" type="int"/>
+        <property name="ageType" column="age_type" type="int"/>
+        <property name="age" column="age" type="int"/>
+        <property name="handlingActivistsType" column="handling_activists_type" type="int"/>
+        <property name="handlingActivists" column="handling_activists" type="int"/>
+        <property name="customPropertiesValues" column="custom_properties_values" type="string"/>
+        <property name="needsRide" column="needs_ride" type="int"/>
+        <property name="voteStatus" column="vote_status" type="int"/>
+        <property name="voteStatusRound1" column="vote_status_round_1" type="int"/>
+        <property name="seniorityMonths" column="seniority_months" type="int"/>
+        <property name="seniorityMonthsType" column="seniority_months_type" type="int"/>
+        <property name="collectionCode" column="collection_code" type="int"/>
+        <property name="canVote" column="can_vote" type="int"/>
+        <property name="groupOid" column="group_oid" type="int"/>
+        <property name="voteIntention" column="vote_intention" type="int"/>
+        <property name="ageRange" column="age_range" type="int"/>
+        <many-to-one name="cityObject" column="city_oid"
+                     class="com.elector.Objects.Entities.CityObject"/>
+    </class>
+
+    <class name="com.elector.Objects.Entities.GroupManagerObject" table="groups_managers" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <many-to-one name="adminUserObject" column="admin_user_oid"
+                     class="com.elector.Objects.Entities.AdminUserObject"/>
+        <property name="phone" type="string" column="phone"/>
+        <property name="password" type="string" column="password"/>
+        <property name="firstName" type="string" column="first_name" not-null="true"/>
+        <property name="lastName" type="string" column="last_name" not-null="true"/>
+        <property name="creationDate" column="creation_date" type="java.util.Date"/>
+        <property name="smsSenderName" type="string" column="sms_sender_name"/>
+        <property  name="sendSms" type="boolean">
+            <column name="send_sms"  default="true"/>
+        </property>
+        <property  name="simulation" type="boolean">
+            <column name="simulation"  default="false"/>
+        </property>
+        <property name="callScenario" type="text" column="call_scenario"/>
+        <property  name="sendSupporterNotVerifiedSms" type="boolean">
+            <column name="send_supporter_not_verified_sms"  default="false"/>
+        </property>
+        <property  name="sendSupporterNotVerifiedNotification" type="boolean">
+            <column name="send_supporter_not_verified_notification"  default="false"/>
+        </property>
+        <property  name="showActivistsRank" type="boolean">
+            <column name="show_activists_rank"  default="true"/>
+        </property>
+        <property  name="sendSupporterVerifiedSms" type="boolean">
+            <column name="send_supporter_verified_sms"  default="false"/>
+        </property>
+        <property  name="sendSupporterVerifiedNotification" type="boolean">
+            <column name="send_supporter_verified_notification"  default="false"/>
+        </property>
+        <property  name="allowCallersToChangeVotingStatus" type="boolean">
+            <column name="allow_callers_to_change_voting_status"  default="false"/>
+        </property>
+        <property  name="allowAddingSupportersWithoutPhoneNumbers" type="boolean">
+            <column name="allow_adding_supporters_without_phone_numbers"  default="false"/>
+        </property>
+        <property name="electionDayCallScenario" type="text" column="election_day_call_scenario"/>
+        <property  name="electionDayCallsSortType" type="int">
+            <column name="election_day_calls_sort_type"  default="1"/>
+        </property>
+        <property  name="language" type="int">
+            <column name="language"  default="1"/>
+        </property>
+    </class>
+
+
+    <class name="com.elector.Objects.Entities.GroupManagerDynamicGroupMapObject" table="groups_managers_dynamic_groups_map" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <property name="creationDate" column="creation_date" type="java.util.Date"/>
+        <many-to-one name="groupManagerObject" column="group_manager_oid"
+                     class="com.elector.Objects.Entities.GroupManagerObject"/>
+        <many-to-one name="dynamicGroupObject" column="dynamic_group_oid"
+                     class="com.elector.Objects.Entities.DynamicGroupObject"/>
+        <many-to-one name="adminUserObject" column="admin_user_oid"
+                     class="com.elector.Objects.Entities.AdminUserObject"/>
+    </class>
+
+    <class name="com.elector.Objects.Entities.AdminCityMapObject" table="admins_cities_map" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <many-to-one name="adminUserObject" column="admin_user_oid"
+                     class="com.elector.Objects.Entities.AdminUserObject"/>
+        <many-to-one name="cityObject" column="city_oid"
+                     class="com.elector.Objects.Entities.CityObject"/>
+
+    </class>
+
+    <class name="com.elector.Objects.Entities.AdminPollingStationStatsObject" table="admins_polling_stations_stats" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <property name="statsTime" column="statsTime" type="java.util.Date"/>
+        <many-to-one name="adminUserObject" column="admin_user_oid"
+                     class="com.elector.Objects.Entities.AdminUserObject" not-null="true"/>
+        <many-to-one name="ballotBoxObject" column="ballot_box_oid"
+                     class="com.elector.Objects.Entities.BallotBoxObject" not-null="true"/>
+        <property  name="totalVoters" type="int">
+            <column name="total_voters"  default="0"/>
+        </property>
+        <property  name="totalSupporters" type="int">
+            <column name="total_supporters"  default="0"/>
+        </property>
+        <property  name="totalUnverifiedSupporters" type="int">
+            <column name="total_unverified_supporters"  default="0"/>
+        </property>
+        <property  name="totalUnknownSupportStatus" type="int">
+            <column name="total_unknown_support_status"  default="0"/>
+        </property>
+        <property  name="totalNotSupporting" type="int">
+            <column name="total_not_supporting"  default="0"/>
+        </property>
+        <property  name="totalVoted" type="int">
+            <column name="total_voted"  default="0"/>
+        </property>
+        <property  name="totalSupportersVoted" type="int">
+            <column name="total_supporters_voted"  default="0"/>
+        </property>
+    </class>
+
+    <class name="com.elector.Objects.Entities.DynamicGroupPollingStationMapObject" table="dynamic_groups_polling_stations_map" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <many-to-one name="ballotBoxObject" column="ballot_box_oid"
+                     class="com.elector.Objects.Entities.BallotBoxObject"/>
+        <many-to-one name="dynamicGroupObject" column="dynamic_group_oid"
+                     class="com.elector.Objects.Entities.DynamicGroupObject"/>
+    </class>
+
+    <class name="com.elector.Objects.Entities.VoterToReloadObject" table="voters_to_reload" lazy="false">
+        <id name="oid" type="int" column="oid">
+            <generator class="native"/>
+        </id>
+        <property  name="deleted" type="boolean">
+            <column name="deleted"  default="false"/>
+        </property>
+        <property name="date" column="date" type="java.util.Date"/>
+        <many-to-one name="voterObject" column="voter_oid"
+                     class="com.elector.Objects.Entities.VoterObject" not-null="true"/>
+        <property  name="prod1" type="boolean">
+            <column name="prod_1"  default="false"/>
+        </property>
+        <property  name="prod2" type="boolean">
+            <column name="prod_2"  default="false"/>
+        </property>
+    </class>
+
+
+</hibernate-mapping>
