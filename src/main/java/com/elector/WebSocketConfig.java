@@ -12,6 +12,8 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import static com.elector.Utils.Definitions.KEEP_ALIVE_MESSAGE;
+
 @Configuration
 @EnableWebSocket
 public class WebSocketConfig implements WebSocketConfigurer {
@@ -35,8 +37,10 @@ public class WebSocketConfig implements WebSocketConfigurer {
         @Override
         protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
             super.handleTextMessage(session, message);
-            for (WebSocketSession socketSession : sessionList) {
-                socketSession.sendMessage(message);
+            if (!message.getPayload().equals(KEEP_ALIVE_MESSAGE)) {
+                for (WebSocketSession socketSession : sessionList) {
+                    socketSession.sendMessage(message);
+                }
             }
         }
 

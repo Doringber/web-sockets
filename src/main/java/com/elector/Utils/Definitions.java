@@ -1000,5 +1000,6 @@ public class Definitions {
 
     public static final String FAKE_LICENSE_ID_PREFIX = "F_";
 
+    public static final String KEEP_ALIVE_MESSAGE = "ka";
 
 }
