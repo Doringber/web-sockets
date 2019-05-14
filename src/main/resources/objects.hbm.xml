@@ -1210,7 +1210,7 @@
             <column name="deleted"  default="false"/>
         </property>
         <property  name="supportersCount" type="int" column="supporters_count"/>
-        <property  name="rank" type="int" column="rank"/>
+        <property  name="rank" type="int" column="total_rank"/>
         <many-to-one name="activistObject" column="activist_oid"
                      class="com.elector.Objects.Entities.ActivistObject" not-null="true"/>
         <property  name="dailyRank" type="int" column="daily_rank"/>
