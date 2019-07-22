@@ -127,13 +127,6 @@ public class AdminUserObject extends GeneralManagerUserObject {
         return this.totalSmsPurchased - this.usedSms;
     }
 
-    public void incrementUsedSms() {
-        this.usedSms++;
-    }
-
-    public void incrementUsedSms(String smsText) {
-        this.usedSms = this.usedSms + (int)(Math.ceil((double)smsText.length() / (double) PARAM_MAX_CHARS_IN_SMS));
-    }
 
     public boolean isActiveUserWithCampaign() {
         return

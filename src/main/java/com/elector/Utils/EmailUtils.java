@@ -130,52 +130,6 @@ public class EmailUtils {
     }
 
     public void sendEmailViaGmail(EmailObject email) {
-        boolean success = false;
-        final String username = ConfigUtils.getConfig(ConfigEnum.gmail_user_name, EMPTY);
-        final String password = ConfigUtils.getConfig(ConfigEnum.gmail_password, EMPTY);
-        if (hasText(username) && hasText(password)) {
-            try {
-                Properties props = new Properties();
-                props.put("mail.smtp.auth", "true");
-                props.put("mail.smtp.starttls.enable", "true");
-                props.put("mail.smtp.host", "smtp.gmail.com");
-                props.put("mail.smtp.port", "587");
-                Session session = Session.getInstance(props,
-                        new javax.mail.Authenticator() {
-                            protected PasswordAuthentication getPasswordAuthentication() {
-                                return new PasswordAuthentication(username, password);
-                            }
-                        });
-                if (allowSendingEmails()) {
-                    Message message = new MimeMessage(session);
-                    message.setFrom(new InternetAddress(email.getFrom()));
-                    message.setRecipients(Message.RecipientType.TO,
-                            InternetAddress.parse(email.getRecipient()));
-                    message.setSubject(email.getSubject());
-                    message.setText(email.getText());
-                    Transport.send(message);
-                    success = true;
-                }
 
-            } catch (MessagingException e) {
-                LOGGER.error(String.format("email failed, recipient: %s, subject: %s, text: %s", email.getRecipient(), email.getSubject(), email.getText()), e);
-            } finally {
-                try {
-                    generalManager.updateObject(new SentEmailObject(email, success));
-                } catch (Exception e) {
-                    LOGGER.error("sent email was not saved to the database", e);
-                }
-            }
-        } else {
-            SentSmsObject sentSmsObject = new SentSmsObject(
-                    "0504730464",
-                    "0504730464",
-                    "פרטי ההתחברות ל-GMAIL אינם מוגדרים במסד הנתונים." ,
-                    new AdminUserObject(SUPER_ADMIN_OID),
-                    new Date(),
-                    false,
-                    new AdminUserObject(69), null);
-            smsUtils.sendSms(sentSmsObject);
-        }
     }
 }

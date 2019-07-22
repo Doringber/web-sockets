@@ -270,36 +270,6 @@ public class BaseController {
         return request.getParameter("w") != null && request.getParameter("w").equals("true");
     }
 
-    protected boolean addUserToGroupManager(JSONObject results, BaseUser user) {
-        boolean error = false;
-        GroupManagerObject groupManager = getUserObject(GroupManagerObject.class, results);
-        AdminUserObject adminUserObject = null;
-        adminUserObject = groupManager.getAdminUserObject();
-        if (adminUserObject != null) {
-            if (adminUserObject.canAddUser()) {
-                user.setPhone(utils.removeAllUnicodeChars(user.getPhone()).replaceAll(MINUS, EMPTY));
-                user.setPassword(utils.removeAllUnicodeChars(user.getPassword()));
-                if (!generalManager.isPhoneNumberExist(user.getPhone())) {
-                    user.setAdminUserObject(adminUserObject);
-                    user.setGroupManagerObject(groupManager);
-                    generalManager.updateObject(user);
-                    adminUserObject.incrementUsersCount();
-                    generalManager.updateObject(adminUserObject);
-                    results.put(PARAM_OID, user.getOid());
-                    smsUtils.sendAddUserSms(user);
-                }else {
-                    error = true;
-                    results.put(PARAM_CODE, PARAM_ERROR_PHONE_NUMBER_EXISTS);
-                }
-            } else {
-                error = true;
-                results.put(PARAM_CODE, PARAM_ERROR_EXCEEDED_MAX_USERS);
-            }
-        } else {
-            error = true;
-        }
-        return error;
-    }
 
     boolean updateBaseUser (BaseUser newData, JSONObject results) {
         boolean error = false;

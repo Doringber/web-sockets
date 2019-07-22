@@ -48,92 +48,6 @@ public class SmsUtils {
         return (adminUserObject.getOid() == SUPER_ADMIN_OID || adminUserObject.canSendSms(1)) && ConfigUtils.getConfig(ConfigEnum.allow_send_sms, false);
     }
 
-//    public void sendAddUserSms(BaseUser user) {
-//        ModelMap model = new ModelMap();
-//        model.addAttribute(PARAM_USER, user);
-//        String template = EMPTY;
-//        AdminUserObject parentUser = null;
-//        if (user instanceof AdminUserObject) {
-//            template = "sms/add_admin_user.vm";
-//            parentUser = new AdminUserObject(SUPER_ADMIN_OID);
-//        } else if (user instanceof ActivistObject){
-//            template = "sms/add_activist.vm";
-//            parentUser = user.getAdminUserObject();
-//        } else {
-//            template = "sms/add_controlled_user.vm";
-//            parentUser = user.getAdminUserObject();
-//        }
-//        String message = utils.parseVelocity(model, template);
-//        if (hasText(message)) {
-//            SentSmsObject sentSmsObject = new SentSmsObject(user.getPhone(), parentUser.getSmsSenderNameToShow(), message, parentUser, new Date(), false, user);
-//            sendSms(sentSmsObject);
-//        }
-//        syncContactsGroupJob.addContactToSyncQueue(user);
-//    }
-
-    public void sendRestorePasswordSms (BaseUser user) {
-        try {
-            ModelMap model = new ModelMap();
-            model.addAttribute(PARAM_USER, user);
-            String message = utils.parseVelocity(model, "sms/restore_password.vm");
-            if (hasText(message)) {
-                SentSmsObject sentSmsObject = new SentSmsObject(
-                        user.getPhone(),
-                        SERVER_SMS_SENDER_NUMBER,
-                        message,
-                        user instanceof AdminUserObject ? generalManager.loadObject(AdminUserObject.class, SUPER_ADMIN_OID) : user.getAdminUserObject(),
-                        new Date(),
-                        false,
-                        user,
-                        user.getGroupManager());
-                LOGGER.info("sendRestorePasswordSms, created SentSmsObject");
-                AdminUserObject adminUserObject = user instanceof AdminUserObject ? (AdminUserObject) user : user.getAdminUserObject();
-                if (ConfigUtils.getConfig(ConfigEnum.allow_send_sms, false)) {
-                    LOGGER.info("sendRestorePasswordSms, allow sending sms is true");
-                    boolean success = smsApi.sendSingleSms(sentSmsObject.getSenderPhone(), sentSmsObject.getRecipientPhone(), sentSmsObject.getText());
-                    LOGGER.info(String.format("sendRestorePasswordSms, sentSmsObject.getSenderPhone() - %s, sentSmsObject.getRecipientPhone() - %s, sentSmsObject.getText() - %s, success - %s",
-                            sentSmsObject.getSenderPhone(), sentSmsObject.getRecipientPhone(), sentSmsObject.getText(), success));
-                    sentSmsObject.setSuccess(success);
-                    if (success) {
-                        adminUserObject.incrementUsedSms();
-                        generalManager.updateObject(adminUserObject);
-                    } else {
-                        LOGGER.warn(String.format("sms %s was not sent", sentSmsObject.getOid()));
-                    }
-                    generalManager.updateObject(sentSmsObject);
-                } else {
-                    LOGGER.warn(String.format("sms was not sent, admin user oid: %s", adminUserObject.getOid()));
-                }
-            }
-        } catch (Exception e) {
-            LOGGER.error("sendRestorePasswordSms", e);
-        }
-
-    }
-
-    public boolean sendSms(SentSmsObject sentSmsObject) {
-        boolean success = false;
-        try {
-            AdminUserObject adminUserObject = sentSmsObject.getAdminUserObject();
-            if (allowSendingSms(adminUserObject)) {
-                success = smsApi.sendSingleSms(sentSmsObject.getSenderPhone(), sentSmsObject.getRecipientPhone(), sentSmsObject.getText());
-                if (success) {
-                    if (adminUserObject.getOid() != SUPER_ADMIN_OID) {
-                        adminUserObject.incrementUsedSms(sentSmsObject.getText());
-                        generalManager.updateObject(adminUserObject);
-                    }
-                } else {
-                    LOGGER.warn(String.format("sms %s was not sent", sentSmsObject.getOid()));
-                }
-            }
-            sentSmsObject.setSuccess(success);
-            generalManager.updateObject(sentSmsObject);
-        } catch (Exception e) {
-            LOGGER.error("sendSms", e);
-        }
-        return success;
-    }
-
 //    public int sendSms(List<SentSmsObject> sentSmsObjectList) {
 //        int sentCount = 0;
 //        for (SentSmsObject sentSmsObject : sentSmsObjectList) {
@@ -355,35 +269,6 @@ public class SmsUtils {
         return 1;
     }
 
-    public void sendAddUserSms(BaseUser user) {
-        String message = String.format(
-                "שלום %s, נוצר עבורך משתמש במערכת אלקטור (%s). תוכל להיכנס למערכת באמצעות מספר הטלפון שלך, והסיסמה הבאה: %s. ",
-                user.getFullName(),
-                user.getAdminUserObject().getCampaignObject().getType() == PARAM_CAMPAIGN_TYPE_MUNICIPAL ? "elector.co.il" : "primary.elector.co.il",
-                user.getPassword());
-        if (hasText(message)) {
-            SentSmsObject sentSmsObject = new SentSmsObject(
-                    user.getPhone(),
-                    user.getAdminUserObject().getSmsSenderNameToShow(),
-                    message,
-                    user.getAdminUserObject(),
-                    new Date(),
-                    false,
-                    user,
-                    user.getGroupManager());
-            sendSms(sentSmsObject);
-        }
-//        new Thread(() -> {
-//            try {
-//                Map<String, Object> params = new HashMap<>();
-//                params.put(PARAM_TYPE, utils.getTypeByClass(user.getClass()));
-//                params.put(PARAM_OID, (user.getOid()));
-//                ServicesApi.requestFromSmsService("add-contact-to-sync-queue", params, null);
-//            } catch (ServiceResponseException e) {
-//                LOGGER.error("Service response null");
-//            }
-//        }).start();
 
-    }
 
 }
