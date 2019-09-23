@@ -34,18 +34,11 @@
         <id name="oid" type="int" column="oid">
             <generator class="native"/>
         </id>
-        <property name="voterId" type="string" column="voter_id" index="ind_get_voter_by_id"/>
-        <property name="firstName" type="string" column="first_name" not-null="true"/>
-        <property name="lastName" type="string" column="last_name" not-null="true"/>
-        <property name="address" type="string">
-            <column name="address"  default="" not-null="true"/>
-        </property>
         <property name="phone" type="string" column="phone"/>
         <property name="birthDate" column="birth_date" type="java.util.Date"/>
         <property name="email" type="string" column="email"/>
         <many-to-one name="adminUserObject" column="admin_user_oid"
-                     class="com.elector.Objects.Entities.AdminUserObject"
-                     index="ind_get_voter_by_id"/>
+                     class="com.elector.Objects.Entities.AdminUserObject"/>
         <many-to-one name="campaignVoterObject" column="campaign_voter_oid"
                      class="com.elector.Objects.Entities.CampaignVoterObject"/>
         <property  name="voted" type="java.lang.Boolean">
@@ -64,7 +57,7 @@
         <property  name="supportSign" type="int">
             <column name="support_sign"  default="0"/>
         </property>
-        <property  name="deleted" type="boolean" index="ind_get_voter_by_id">
+        <property  name="deleted" type="boolean" index="ind_deleted">
             <column name="deleted"  default="false"/>
         </property>
         <property  name="supportersListStatus" type="int">
@@ -94,6 +87,7 @@
             <column name="vote_intention"  default="0"/>
         </property>
     </class>
+
 
     <class name="com.elector.Objects.Entities.ActivistVoterMapObject" table="activists_voters_map" lazy="false">
         <id name="oid" type="int" column="oid">
