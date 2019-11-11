@@ -51,11 +51,11 @@ public class AppConfig {
         hibernateProperties.put("hibernate.hbm2ddl.auto", "update");
         hibernateProperties.put("hibernate.jdbc.batch_size", 50);
         hibernateProperties.put("hibernate.connection.characterEncoding", "utf8");
-        hibernateProperties.put("hibernate.cache.use_second_level_cache", "true");
+//        hibernateProperties.put("hibernate.cache.use_second_level_cache", "true");
        // hibernateProperties.put("hibernate.generate_statistics", "true");
-        hibernateProperties.put("net.sf.ehcache.configurationResourceName", "/conf_ehcache.xml");
-        hibernateProperties.put("hibernate.cache.use_query_cache", "true");
-        hibernateProperties.put("hibernate.cache.region.factory_class", "org.hibernate.cache.ehcache.EhCacheRegionFactory");
+//        hibernateProperties.put("net.sf.ehcache.configurationResourceName", "/conf_ehcache.xml");
+//        hibernateProperties.put("hibernate.cache.use_query_cache", "true");
+//        hibernateProperties.put("hibernate.cache.region.factory_class", "org.hibernate.cache.ehcache.EhCacheRegionFactory");
         hibernateProperties.put("hibernate.enable_lazy_load_no_trans", "true");
         sessionFactoryBean.setHibernateProperties(hibernateProperties);
         sessionFactoryBean.setMappingResources("objects.hbm.xml");

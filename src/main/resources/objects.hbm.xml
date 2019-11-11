@@ -125,7 +125,7 @@
     </class>
 
     <class name="com.elector.Objects.Entities.GeocodeCoordinatesObject" table="geocode_coordinates" lazy="true">
-        <cache usage="nonstrict-read-write" />
+        
         <id name="oid" type="int" column="oid">
             <generator class="native"/>
         </id>
@@ -140,7 +140,7 @@
     </class>
 
     <class name="com.elector.Objects.Entities.CampaignObject" table="campaigns" lazy="true">
-        <cache usage="nonstrict-read-write" />
+        
         <id name="oid" type="int" column="oid">
             <generator class="native"/>
         </id>
@@ -250,7 +250,7 @@
     </class>
 
     <class name="com.elector.Objects.Entities.BallotBoxObject" table="ballot_boxes" lazy="false">
-        <cache usage="nonstrict-read-write" />
+        
         <id name="oid" type="int" column="oid">
             <generator class="native"/>
         </id>
@@ -808,7 +808,7 @@
     </class>
 
     <class name="com.elector.Objects.Entities.CampaignVoterObject" table="campaign_voters" lazy="false">
-        <cache usage="nonstrict-read-write" />
+        
         <id name="oid" type="int" column="oid">
             <generator class="native"/>
         </id>
@@ -867,7 +867,7 @@
     </class>
 
     <class name="com.elector.Objects.Entities.CityObject" table="cities" lazy="false">
-        <cache usage="nonstrict-read-write" />
+        
         <id name="oid" type="int" column="oid">
             <generator class="native"/>
         </id>
@@ -1003,7 +1003,7 @@
     </class>
 
     <class name="com.elector.Objects.Entities.BallotBoxRoomObject" table="ballot_boxes_rooms" lazy="false">
-        <cache usage="nonstrict-read-write" />
+        
         <id name="oid" type="int" column="oid">
             <generator class="native"/>
         </id>
@@ -1329,7 +1329,7 @@
     </class>
 
     <class name="com.elector.Objects.Entities.LaborParty.IsraelLaborPartyVoterObject" table="israel_labor_party_voters" lazy="false">
-        <cache usage="nonstrict-read-write" />
+        
         <id name="oid" type="int" column="oid">
             <generator class="native"/>
         </id>
@@ -1363,7 +1363,7 @@
     </class>
 
     <class name="com.elector.Objects.Entities.LikudParty.LikudPartyVoterObject" table="likud_party_voters" lazy="false">
-        <cache usage="nonstrict-read-write" />
+        
         <id name="oid" type="int" column="oid">
             <generator class="native"/>
         </id>

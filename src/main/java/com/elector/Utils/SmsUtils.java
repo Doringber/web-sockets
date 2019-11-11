@@ -33,8 +33,6 @@ public class SmsUtils {
     @Autowired
     private SmsApi smsApi;
 
-    @Autowired
-    private EmailUtils emailUtils;
 
 //    @Autowired
 //    private SyncContactsGroupJob syncContactsGroupJob;
@@ -148,21 +146,6 @@ public class SmsUtils {
                 break;
         }
         return String.format("%s_%s_%s", adminOid, groupTypeText, ConfigUtils.getConfig(ConfigEnum.prod, false) ? "prod" : "dev");
-    }
-
-    public boolean removeContactFromGroup(BaseContact contact) {
-        boolean error = false;
-        String groupNameInService = createGroupNameForService(contact.getAdminUserObject().getOid(), contact.getGroupType(false));
-        ContactsGroupObject contactsGroupObject = generalManager.getContactsGroupByNameInService(groupNameInService);
-        error = contactsGroupObject == null || !smsApi.removeContactFromGroup(contactsGroupObject.getGroupId(), contact.getPhone());
-        if (error) {
-            EmailObject emailObject = new EmailObject(
-                    "contact was not removed from sms group",
-                    String.format("contact type: %s, contact oid: %s", contact.getUserType(), contact.getOid()),
-                    TECHNICAL_ISSUES_EMAIL);
-            emailUtils.sendEmailViaGmail(emailObject);
-        }
-        return !error;
     }
 
     public boolean removeContactFromGroup(int groupId, String fakeEmail) {

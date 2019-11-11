@@ -2,9 +2,7 @@ package com.elector.Objects.Entities;
 
 
 import com.elector.Objects.General.BaseEntity;
-import com.google.maps.model.LatLng;
 
-import static com.elector.Utils.Definitions.PARAM_DEFAULT_ZOOM_GOOGLE_MAPS;
 
 /**
  * Created by Sigal on 7/22/2017.
@@ -18,14 +16,6 @@ public class GeocodeCoordinatesObject extends BaseEntity{
 
     public GeocodeCoordinatesObject () {
 
-    }
-
-    public GeocodeCoordinatesObject (LatLng latLng, String address, int type) {
-        this.lat = latLng.lat;
-        this.lng = latLng.lng;
-        this.address = address;
-        this.zoom = PARAM_DEFAULT_ZOOM_GOOGLE_MAPS;
-        this.type = type;
     }
 
 

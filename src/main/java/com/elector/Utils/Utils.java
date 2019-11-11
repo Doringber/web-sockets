@@ -13,12 +13,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import jdk.nashorn.internal.ir.debug.ObjectSizeCalculator;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.http.HttpStatus;
-import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,7 +76,6 @@ public class Utils {
     private static Map<String, Long> blockedIpsMap = new ConcurrentHashMap<>();
     private static Map<String, Integer> requestsPerIpMap = new ConcurrentHashMap<>();
     public static boolean enableBlocking = true;
-    public static StandardPBEStringEncryptor encryptor;
     private static Map<Integer, Integer> totalVotersCallsByAdmin = new HashMap<>();
     private static List<AdditionalCampaignFieldObject.Option> likudCollectionCodeOptions = new ArrayList<>();
     public static Map<Integer, Set<Integer>> adminsPollingStationsWithObserversMap = new HashMap<>();
@@ -90,8 +86,6 @@ public class Utils {
         new Thread(() -> {
             long start = System.currentTimeMillis();
             translations = generalManager.getAllTranslations();
-            encryptor = new StandardPBEStringEncryptor();
-            encryptor.setPassword(ConfigUtils.getConfig(ConfigEnum.encryption_key, EMPTY));
         }).start();
     }
 
@@ -331,7 +325,7 @@ public class Utils {
             con.setRequestMethod(HTTP_REQUEST_GET);
             con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95 Safari/537.11");
             int responseCode = con.getResponseCode();
-            if (responseCode != HttpStatus.SC_OK) {
+            if (responseCode != 200) {
                 LOGGER.info(String.format("Response Code: %s, domain: %s, params: %s", responseCode, domain, paramsBuilder.toString()));
             } else {
                 BufferedReader in = new BufferedReader(
@@ -399,22 +393,6 @@ public class Utils {
         day = cal.get(Calendar.DAY_OF_MONTH);
         LocalDate end = LocalDate.of(year, month, day);
         return ChronoUnit.YEARS.between(start, end);
-    }
-
-    public static boolean isFileType(String fileName, int requiredType) {
-        List<String> typesToAllow = new ArrayList<>();
-        switch (requiredType) {
-            case FILE_TYPE_IMAGE:
-                typesToAllow = Arrays.asList("png", "jpg", "jpeg");
-                break;
-            case FILE_TYPE_SPREADSHEET:
-                typesToAllow = Arrays.asList("csv", "xls", "xlsx");
-                break;
-            case FILE_TYPE_TEXT:
-                typesToAllow = Arrays.asList("txt");
-                break;
-        }
-        return typesToAllow.contains(FilenameUtils.getExtension(fileName));
     }
 
     private static String symbolRemove(String symbol, String string) {

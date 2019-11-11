@@ -1,16 +1,13 @@
 package com.elector;
 
-import org.h2.tools.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 
 import javax.sql.DataSource;
-import java.sql.SQLException;
 import java.util.Properties;
 
 /**
@@ -39,9 +36,9 @@ public class TestConfig {
         hibernateProperties.put("hibernate.hbm2ddl.auto", "update");
         hibernateProperties.put("hibernate.jdbc.batch_size", 50);
         hibernateProperties.put("hibernate.connection.characterEncoding", "utf8");
-        hibernateProperties.put("hibernate.cache.use_second_level_cache", "true");
-        hibernateProperties.put("hibernate.cache.use_query_cache", "true");
-        hibernateProperties.put("hibernate.cache.region.factory_class", "org.hibernate.cache.ehcache.EhCacheRegionFactory");
+//        hibernateProperties.put("hibernate.cache.use_second_level_cache", "true");
+//        hibernateProperties.put("hibernate.cache.use_query_cache", "true");
+//        hibernateProperties.put("hibernate.cache.region.factory_class", "org.hibernate.cache.ehcache.EhCacheRegionFactory");
         sessionFactoryBean.setHibernateProperties(hibernateProperties);
         sessionFactoryBean.setMappingResources("objects.hbm.xml");
         return sessionFactoryBean;
@@ -54,15 +51,5 @@ public class TestConfig {
         return transactionManager;
     }
 
-    @Bean(initMethod = "start", destroyMethod = "stop")
-    @DependsOn("h2WebServer")
-    public Server h2Server() throws SQLException {
-        return Server.createTcpServer("-tcp", "-tcpAllowOthers");
-    }
-
-    @Bean(initMethod = "start", destroyMethod = "stop")
-    public Server h2WebServer() throws SQLException {
-        return Server.createWebServer("-web", "-webAllowOthers");
-    }
 
 }
