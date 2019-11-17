@@ -122,86 +122,23 @@
     </dependencies>
 
     <build>
-        <finalName>${project.artifactId}_${new.service.version}</finalName>
+        <finalName>ws</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>properties-maven-plugin</artifactId>
-                <version>1.0.0</version>
+                <groupId>org.jvnet.jaxb2.maven2</groupId>
+                <artifactId>maven-jaxb2-plugin</artifactId>
+                <version>0.12.3</version>
                 <executions>
                     <execution>
-                        <phase>initialize</phase>
                         <goals>
-                            <goal>read-project-properties</goal>
+                            <goal>generate</goal>
                         </goals>
-                        <configuration>
-                            <files>
-                                <file> C:\elector\props\prod1.properties</file>
-                            </files>
-                        </configuration>
                     </execution>
                 </executions>
-                <dependencies>
-                    <!-- https://mvnrepository.com/artifact/org.codehaus.mojo/properties-maven-plugin -->
-                    <dependency>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>properties-maven-plugin</artifactId>
-                        <version>1.0.0</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.8</version>
-                <executions>
-                    <execution>
-                        <id>scp-to-remote</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <target>
-                                <scp localFile="${project.basedir}/target/${project.build.finalName}.jar"
-                                     remoteToFile="${remote_user}@${remote_host}:${remote_path}/${project.artifactId}" verbose="true"
-                                     password="${remote_password}" trust="true" >
-                                </scp>
-                            </target>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>catch-new-version</id>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <phase>validate</phase>
-                        <configuration>
-                            <target>
-                                <input
-                                        message="ENTER SNAPSHOT VERSION: "
-                                        addproperty="new.service.version" />
-                            </target>
-                            <exportAntProperties>true</exportAntProperties>
-                        </configuration>
-                    </execution>
-                </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.jcraft</groupId>
-                        <artifactId>jsch</artifactId>
-                        <version>0.1.53</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>ant</groupId>
-                        <artifactId>ant-jsch</artifactId>
-                        <version>1.6.5</version>
-                    </dependency>
-                </dependencies>
             </plugin>
         </plugins>
     </build>
