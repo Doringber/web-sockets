@@ -60,9 +60,6 @@
         <property  name="deleted" type="boolean" index="ind_deleted">
             <column name="deleted"  default="false"/>
         </property>
-        <property  name="supportersListStatus" type="int">
-            <column name="supporters_list_status"  default="0"/>
-        </property>
         <property name="homePhone" type="string" column="home_phone"/>
         <property name="extraPhone" type="string" column="extra_phone"/>
         <many-to-one name="activistObject" column="activist_oid"
@@ -72,17 +69,6 @@
         <property  name="needsRide" type="int">
             <column name="needs_ride"  default="0"/>
         </property>
-        <property  name="votedRound1" type="java.lang.Boolean">
-            <column name="voted_round_1"  default="false"/>
-        </property>
-        <many-to-one name="israelLaborPartyVoterObject" column="israel_labor_party_voter_oid"
-                     class="com.elector.Objects.Entities.LaborParty.IsraelLaborPartyVoterObject"/>
-        <many-to-one name="likudPartyVoterObject" column="likud_party_voter_oid"
-                     class="com.elector.Objects.Entities.LikudParty.LikudPartyVoterObject"/>
-        <many-to-one name="israelLaborVoterEditableDataObject" column="israel_labor_voter_editable_data_oid"
-                     class="com.elector.Objects.Entities.LaborParty.IsraelLaborVoterEditableDataObject" cascade="all"/>
-        <many-to-one name="likudVoterEditableDataObject" column="likud_voter_editable_data_oid"
-                     class="com.elector.Objects.Entities.LikudParty.LikudVoterEditableDataObject" cascade="all"/>
         <property  name="voteIntention" type="int">
             <column name="vote_intention"  default="0"/>
         </property>
